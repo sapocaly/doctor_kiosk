@@ -23,7 +23,7 @@ video {
 
 #log_in {
     font-size: 20px;
-    color:red;
+    color: red;
 }
 
 /* Title */
@@ -83,4 +83,17 @@ a:hover,
     background-color: #f12545;
     border-color: #f12545;
     border-radius: 0;
+}
+
+#dash, #dash:hover, visited {
+    font-weight: 300;
+    font-size: 25px;
+    border-bottom-style: none;
+    color: white;
+    text-decoration: none;
+}
+
+#dash:hover {
+    font-weight: 800;
+    /*font-size: 30px;*/
 }

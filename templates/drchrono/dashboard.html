@@ -6,11 +6,12 @@
 
 {% block head_block %}
     <link href="{% static 'drchrono/css/simple-sidebar.css' %}" rel="stylesheet">
+    <link href="{% static 'drchrono/css/ngprogress.css' %}" rel="stylesheet">
+    <link href="{% static 'drchrono/css/ngToast.min.css' %}" rel="stylesheet">
     <link href="{% static 'drchrono/css/dashboard.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block body_block %}
-
     <div id="wrapper" class="toggled">
 
         <!-- Sidebar -->
@@ -43,6 +44,7 @@
                     <div class="col-lg-12">
                         {%verbatim%}
                         <div ng-app="myApp" ng-controller="myCtrl">
+                            <toast></toast>
                             <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
                             <span id="waiting-avg"> Patient Average Waiting Time:<span
                                     id="avg-m">{{ avg_time }}</span>minutes</span>
@@ -81,7 +83,7 @@
                                                 <tr>
                                                     <th class="col-xs-6"><span
                                                             class="pat-label">First Billed Date:</span>
-                                                        {{ current.first_billed_date }}
+                                                        {{ current.first_billed_date | limitTo:10:0}}
                                                     </th>
                                                     <th class="col-xs-6"><span class="pat-label">Notes:</span>
                                                         {{ current.notes }}
@@ -172,11 +174,17 @@
 {% endblock %}
 
 {% block script_block %}
+    <script src="{% static 'drchrono/js/ngprogress.js' %}"></script>
     <script src="{% static 'drchrono/js/dashboard.js' %}"></script>
+    <script src="{% static 'drchrono/js/angular-animate.js' %}"></script>
+    <script src="{% static 'drchrono/js/angular-sanitize.js' %}"></script>
+    <script src="{% static 'drchrono/js/ngToast.min.js' %}"></script>
     <script>
         $("#menu-toggle").click(function (e) {
             e.preventDefault();
             $("#wrapper").toggleClass("toggled");
+            console.log($('.ng-toast.ng-toast--right .ng-toast__list'));
+            $('.ng-toast.ng-toast--right .ng-toast__list').toggleClass("toggled");
         });
     </script>
 {% endblock %}

@@ -10,6 +10,7 @@ api_patterns = [
     url(r'^appointment/$', api_views.AppointmentView.as_view(), name='appointment'),
     url(r'^doctor/$', api_views.DoctorView.as_view(), name='doctor'),
     url(r'^appointment_list/$', api_views.AppointmentListView.as_view(), name='appointment_list'),
+    url(r'^notification/$', api_views.NotificationView.as_view(), name='notification'),
 ]
 
 urlpatterns = [

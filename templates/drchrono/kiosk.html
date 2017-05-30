@@ -7,6 +7,8 @@
 
 {% block head_block %}
     <link href="{% static "drchrono/css/kiosk.css" %}" rel="stylesheet">
+    <link href="{% static 'drchrono/css/ngprogress.css' %}" rel="stylesheet">
+    <link href="{% static "drchrono/css/angular-moment-picker.min.css" %}" rel="stylesheet">
 {% endblock %}
 
 
@@ -105,7 +107,17 @@
                         <div class="form-group">
                             <label class="col-lg-3 control-label">Data of Birth:</label>
                             <div class="col-lg-8">
-                                <input class="form-control" type="text" ng-model="patient.date_of_birth">
+                                <div class="input-group"
+                                     moment-picker="patient.date_of_birth"
+                                     format="YYYY-MM-DD">
+                    <span class="input-group-addon">
+                        <i class="octicon octicon-calendar"></i>
+                    </span>
+                                    <input class="form-control"
+                                           placeholder="Select a date"
+                                           ng-model="patient.date_of_birth"
+                                           ng-model-options="{ updateOn: 'blur' }">
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -135,5 +147,8 @@
 {% endblock %}
 
 {% block script_block %}
+    <script src="{% static 'drchrono/js/ngprogress.js' %}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"></script>
     <script src="{% static 'drchrono/js/kiosk.js' %}"></script>
+    <script src="{% static 'drchrono/js/angular-moment-picker.min.js' %}"></script>
 {% endblock %}

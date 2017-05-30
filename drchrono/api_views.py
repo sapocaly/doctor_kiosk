@@ -1,9 +1,12 @@
+from datetime import timedelta
+import time
+
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views.generic import View
 
 from drchrono.helper import ApiHelper, get_access_token
-from drchrono.models import Doctor, AppointmentProfile
+from drchrono.models import Doctor, AppointmentProfile, Notification
 
 
 class PatientView(View):
@@ -83,3 +86,26 @@ class DoctorView(View):
     def get(self, request):
         doctor = Doctor.objects.get(doctor_id=request.session['doc_id'])
         return JsonResponse(doctor.as_json())
+
+
+class NotificationView(View):
+    def get(self, request):
+        doctor = Doctor.objects.get(doctor_id=request.session['doc_id'])
+        print 'ha'
+        for i in range(3):
+            time_limit = timezone.now() - timedelta(minutes=60)
+            notifications = Notification.objects.filter(notified=False, created_time__gt=time_limit, doctor=doctor)
+            if notifications:
+                print notifications
+                messages = [notification.message for notification in notifications]
+                notifications.update(notified=True)
+                print messages
+                return JsonResponse({'success': True, 'data': {'messages': messages}}, safe=False)
+            time.sleep(2)
+        return JsonResponse({'success': True, 'data': {'messages': []}}, safe=False)
+
+    def post(self, request):
+        message = request.POST['message']
+        doctor = Doctor.objects.get(doctor_id=request.session['doc_id'])
+        Notification.objects.create(message=message, doctor=doctor)
+        return JsonResponse({"success": True})

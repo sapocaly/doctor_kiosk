@@ -62,15 +62,15 @@ img {
     width: 180px;
 }
 
-.pat-label{
+.pat-label {
     font-size: 15px;
 }
 
 #waiting-avg {
     font-size: 30px;
-    float:right;
+    float: right;
 }
 
-#avg-m{
+#avg-m {
     font-size: 45px;
 }

@@ -1,16 +1,16 @@
 import os
 from random import shuffle, randint
-
-from django.utils import timezone
-from django.utils.timezone import template_localtime, localtime
-
-from drchrono.models import AppointmentProfile, Doctor
+import django
+import requests
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'drchrono.settings')
-
-import django
-
 django.setup()
+
+from django.utils import timezone
+from django.utils.timezone import localtime
+
+from drchrono.models import AppointmentProfile, Doctor, Notification
+
 from drchrono.helper import ApiHelper
 
 # from faker import Faker
@@ -28,9 +28,9 @@ scheduled_time	timestamp	required	The starting time of the appointment
 
 DOCTOR = 133464
 OFFICE = 141500
-PATIENT = [65249162]
+PATIENT = [65249162,65339098,65339112,65339114]
 DURATIONS = [30, 45, 50, 37]
-TOKEN = '7kHtQqk2hsKhrmuDsj4aup3dWV2l2K'
+TOKEN = 'QL6w3g0HbSdqFWMhMxCqcsETPKYg2M'
 
 
 def generate_api_appointments():
@@ -53,6 +53,13 @@ def clean_appointment_profiles():
 def clean_doctors():
     Doctor.objects.all().delete()
 
+def delete_all_appointment():
+    today = localtime(timezone.now()).date()
+    today_apps = ApiHelper.get_appointments(TOKEN, date=today)
+    app_ids = [app['id'] for app in today_apps]
+    for id in app_ids:
+        requests.delete('https://drchrono.com/api/appointments/{}'.format(id), headers = {'Authorization': 'Bearer {}'.format(TOKEN), })
+        ##ApiHelper.delete_appointments(TOKEN, id=id)
 
 def reset_all_appointment():
     today = localtime(timezone.now()).date()
@@ -62,5 +69,11 @@ def reset_all_appointment():
         ApiHelper.patch_appointments(TOKEN, id=id, status='Confirmed')
 
 
+
 if __name__ == '__main__':
     reset_all_appointment()
+    #delete_all_appointment()
+    #generate_api_appointments()
+    #print timezone.now()
+    #Notification.objects.all().delete()
+    #clean_doctors()

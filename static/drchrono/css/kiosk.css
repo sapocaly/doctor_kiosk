@@ -1,6 +1,7 @@
 input[type="text"],
 input[type="email"],
 input[type="date"],
+.form-control,
 select.form-control {
     height: 50px;
     margin: 0;

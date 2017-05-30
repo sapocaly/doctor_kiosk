@@ -1,5 +1,5 @@
 (function () {
-    var app = angular.module("myApp", []);
+    var app = angular.module("myApp", ['ngProgress','moment-picker']);
 
     app.config(['$httpProvider',
         function ($httpProvider) {
@@ -10,9 +10,9 @@
     ]);
 
 
-    app.controller('myCtrl', function ($scope, $http) {
+    app.controller('myCtrl', function ($scope, $http, ngProgressFactory) {
+        $scope.progressbar = ngProgressFactory.createInstance();
         $scope.step = 1;
-
         // back to previous step
         $scope.prev = function () {
             $scope.step--;
@@ -20,6 +20,7 @@
 
         // step one function, check patient info
         $scope.check_patient_info = function () {
+            $scope.progressbar.start();
             // make sure form filled
             if ($scope.first_name && $scope.last_name && $scope.email) {
                 api_get("/api/patient/",
@@ -29,6 +30,7 @@
                         "email": $scope.email,
                     },
                     function (response) {
+                        $scope.progressbar.complete();
                         // assuming all f_name, l_name, email combination is unique
                         $scope.patient = response.data.data[0];
                         if ($scope.patient) {
@@ -54,11 +56,13 @@
 
         // don't really need to inject this into scope, but whatever
         $scope.get_appointment_info = function () {
+            $scope.progressbar.start();
             $scope.error_2 = '......retrieving appointment information....';
             $scope.waiting_count = 0;
             $scope.appointment = null;
 
             api_get("/api/appointment_list/", {}, function (response) {
+                $scope.progressbar.complete();
                 var appointments = response.data.data.appointments;
                 for (var j = 0; j < appointments.length; j++) {
                     app = appointments[j];
@@ -83,11 +87,13 @@
 
         // as its name suggests
         $scope.appointment_check_in = function () {
+            $scope.progressbar.start();
             var params = {
                 'id': $scope.appointment.id,
                 'status': 'Arrived',
             };
             api_post("/api/appointment/", params, function (response) {
+                $scope.progressbar.complete();
                 // this is bad, should not happen
                 if (!response.data.success) {
                     console.error(response.data.error);
@@ -99,9 +105,21 @@
                     $scope.step = 3;
                 }
             });
+            $scope.send_notification();
+        };
+
+        $scope.send_notification = function () {
+            console.log('start sending notification');
+            var params = {
+                'message': $scope.patient.first_name + ' ' + $scope.patient.last_name + ' just checked in',
+            };
+            api_post("/api/notification/", params, function (response) {
+                console.log(response);
+            });
         };
 
         $scope.update_patient_info = function () {
+            $scope.progressbar.start();
             var params = {
                 'id': $scope.patient.id,
                 'email': $scope.patient.email,
@@ -114,6 +132,7 @@
             //fields with blank input will not be updated at this time
             //to-do: fix the blank input, this might be handled easily from the backend
             api_post("/api/patient/", params, function (response) {
+                $scope.progressbar.complete();
                 if (!response.data.success) {
                     show_dialog(BootstrapDialog.TYPE_DANGER, "Don't panic", JSON.stringify(response.data.error));
                 } else {

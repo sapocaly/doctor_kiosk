@@ -1,4 +1,3 @@
-import os
 from social.backends.oauth import BaseOAuth2
 
 

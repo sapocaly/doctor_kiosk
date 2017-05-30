@@ -1,0 +1,182 @@
+{% extends 'drchrono/base.html' %}
+{% load staticfiles %}
+{% block title_block %}
+    Dashboard
+{% endblock %}
+
+{% block head_block %}
+    <link href="{% static 'drchrono/css/simple-sidebar.css' %}" rel="stylesheet">
+    <link href="{% static 'drchrono/css/dashboard.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block body_block %}
+
+    <div id="wrapper" class="toggled">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">Dr. {{ doctor.last_name }}
+                    </a>
+                </li>
+                <li>
+                    <a href="#1a">Appointments</a>
+                </li>
+                <li>
+                    <a href="#2a">Statistics</a>
+                </li>
+                <li>
+                    <a href="#">About</a>
+                </li>
+                <li>
+                    <a href="{% url 'logout' %}">Logout</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        {%verbatim%}
+                        <div ng-app="myApp" ng-controller="myCtrl">
+                            <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
+                            <span id="waiting-avg"> Patient Average Waiting Time:<span
+                                    id="avg-m">{{ avg_time }}</span>minutes</span>
+                            <br>
+                            <!-- patients table -->
+                            <div class="container" id="large-container">
+                                <br>
+                                <div ng-show="current" id="current-card">
+                                    <h1>Current Appointment</h1>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="portrait">
+                                                <img ng-src="{{ current.patient.patient_photo }}" alt="Patient Photo">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <table class="table" id="current-table">
+                                                <tbody>
+                                                <tr>
+                                                    <th class="col-xs-6"><span class="pat-label">Name:</span>
+                                                        {{ current.patient.first_name }} {{current.patient.last_name }}
+                                                    </th>
+                                                    <th class="col-xs-6"><span class="pat-label">Date of Birth:</span>
+                                                        {{ current.patient.date_of_birth }}
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th class="col-xs-6"><span class="pat-label">Custom Vitals:</span>
+                                                        {{ current.custom_vitals }}
+                                                    </th>
+                                                    <th class="col-xs-6"><span class="pat-label">Location:</span> Exam
+                                                        Room {{ current.exam_room }}
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th class="col-xs-6"><span
+                                                            class="pat-label">First Billed Date:</span>
+                                                        {{ current.first_billed_date }}
+                                                    </th>
+                                                    <th class="col-xs-6"><span class="pat-label">Notes:</span>
+                                                        {{ current.notes }}
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th class="col-xs-6"><span class="pat-label">Cell Phone:</span>
+                                                        {{ current.patient.cell_phone }}
+                                                    </th>
+                                                    <th class="col-xs-6"><span class="pat-label">Address:</span>
+                                                        {{ current.patient.address }}
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th class="col-xs-6"><span class="pat-label">Email:</span>
+                                                        {{ current.patient.email }}
+                                                    </th>
+                                                    <th class="col-xs-6"><span class="pat-label">Employer:</span>
+                                                        {{ current.patient.employer }}
+                                                    </th>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <br><br><br><br><br><br><br><br><br>
+                                            <a class="btn btn-primary" role="button"
+                                               ng-click="finish_appointment(current)">Finish this one</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="schedule-card">
+                                    <h1>Schedule</h1>
+                                    <br>
+                                    <table class="table" id="schedule-table">
+                                        <thead>
+                                        <tr>
+                                            <th class="col-xs-2">Scheduled Time</th>
+                                            <th class="col-xs-2">Patient Name</th>
+                                            <th class="col-xs-2">Time Waited</th>
+                                            <th class="col-xs-2">Duration</th>
+                                            <th class="col-xs-2">Location</th>
+                                            <th class="col-xs-1">Status</th>
+                                            <th class="col-xs-1"></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="app in appointments" ng-class="app.status">
+                                            <td class="col-xs-2">
+                                                {{ app.scheduled_time | limitTo:10:11}}
+                                            </td>
+                                            <td class="col-xs-2">
+                                                {{ app.patient.first_name }} {{ app.patient.last_name }}
+                                            </td>
+                                            <td class="col-xs-2" ng-if="app.status =='Arrived'">
+                                                {{ (time_counter + app.time_waited ) | secondsToDateTime |
+                                                date:'HH:mm:ss'}}
+                                            </td>
+                                            <td class="col-xs-2" ng-if="app.status !='Arrived'">
+                                                {{ (app.time_waited ) | secondsToDateTime | date:'HH:mm:ss'}}
+                                            </td>
+                                            <td class="col-xs-2"> {{ app.duration }} minutes</td>
+                                            <td class="col-xs-2"> Exam Room {{ app.exam_room }}</td>
+                                            <td class="col-xs-1"> {{ app.status }}</td>
+                                            <td class="col-xs-1">
+                                                <div ng-if="!current && app.status == 'Arrived'">
+                                                    <a class="btn btn-primary start-btn"
+                                                       ng-click="start_appointment(app)"
+                                                       role="button">Start</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            {%endverbatim%}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+{% endblock %}
+
+{% block script_block %}
+    <script src="{% static 'drchrono/js/dashboard.js' %}"></script>
+    <script>
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    </script>
+{% endblock %}

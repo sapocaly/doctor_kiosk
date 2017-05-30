@@ -1,0 +1,76 @@
+#schedule-table {
+    font-size: 20px;
+}
+
+#schedule-table thead {
+    font-size: 16px;
+}
+
+#schedule-table tbody {
+    color: white;
+}
+
+#schedule-table td {
+    border-top: solid;
+    border-bottom: solid;
+    border-width: 7px;
+}
+
+#schedule-table tbody tr:hover {
+    transform: scale(1.05);
+}
+
+#large-container {
+    width: 95%;
+}
+
+.Complete {
+    background-color: #3D9970;
+}
+
+.Confirmed {
+    background-color: #67BCDB;
+}
+
+.Arrived {
+    background-color: #D46A6A;
+}
+
+#current-table tbody {
+    font-size: 22px;
+}
+
+#schedule-card {
+    margin-top: 50px;
+    /*background-color: #003366;*/
+}
+
+#current-card {
+    background-color: #f8f8f8;
+    box-shadow: 10px 10px 5px #888888;
+    /*background-color: red;*/
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.portrait {
+    margin: 20px;
+    height: 250px;
+    width: 180px;
+}
+
+.pat-label{
+    font-size: 15px;
+}
+
+#waiting-avg {
+    font-size: 30px;
+    float:right;
+}
+
+#avg-m{
+    font-size: 45px;
+}

@@ -1,0 +1,40 @@
+{% extends 'drchrono/base.html' %}
+{% load staticfiles %}
+
+
+{% block head_block %}
+    <link href="{% static "drchrono/css/main.css" %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block body_block %}
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="col-md-11">DrChrono</div>
+            <div class="col-md-1"><a href="{% url 'dashboard' %}">
+                   Dashboard
+                </a>
+            </div>
+        </div>
+    </nav>
+    <video poster="{% static "drchrono/files/For_Wes.jpg" %}" playsinline autoplay muted loop>
+        <source src="{% static "drchrono/files/For_Wes.webm" %}" type="video/webm">
+        <source src="{% static "drchrono/files/For_Wes.mp4" %}" type="video/mp4">
+    </video>
+    <div id="intro">All-In-One <a href="" class="highlight light1">Practice Management</a>, <a href=""
+                                                                                               class="highlight light2">Electronic
+        Health Records</a> and <a href="" class="highlight light3">Medical Billing.</a> Voted #1 mobile electronic
+        health
+        record by doctors four years in a row.
+        <p>
+            <br>
+            <br>
+        <center>
+            <a class="btn btn-primary btn-lg log_in" href="{% url 'kiosk' %}" role="button">
+                <div class="button-text">Check In</div>
+
+            </a>
+        </center>
+        </p>
+    </div>
+{% endblock %}

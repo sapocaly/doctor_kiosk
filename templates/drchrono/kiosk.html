@@ -1,0 +1,139 @@
+{% extends 'drchrono/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Check In
+{% endblock %}
+
+{% block head_block %}
+    <link href="{% static "drchrono/css/kiosk.css" %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block body_block %}
+    <video poster="{% static "drchrono/files/Black_Keys/Black_Keys.jpg" %}" playsinline autoplay muted loop>
+        <source src="{% static "drchrono/files/Black_Keys/Black_Keys.webm" %}" type="video/webm">
+        <source src="{% static "drchrono/files/Black_Keys/Black_Keys.mp4" %}" type="video/mp4">
+    </video>
+    {%verbatim%}
+    <div style="height:40px;"></div>
+    <div class="assessment-container container" ng-app="myApp" ng-controller="myCtrl">
+        <div class="row">
+            <fieldset ng-show="step==1">
+                <div class="form-top">
+                    <div class="form-top-left">
+                        <h2>Check In</h2>
+                        <p>{{ error_1 }}
+                        </p>
+                    </div>
+                </div>
+                <div class="form-bottom">
+                    <div class="row">
+                        <div class="form-group col-md-6 col-sm-6">
+                            <input type="text" class="form-control" placeholder="Firstname" ng-model="first_name">
+                        </div>
+                        <div class="form-group col-md-6 col-sm-6">
+                            <input type="text" class="form-control" placeholder="Lastname" ng-model="last_name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="Email" class="form-email form-control" ng-model="email"
+                               required>
+                    </div>
+
+                    <button type="button" class="btn btn-next" ng-click="check_patient_info()">Next</button>
+                </div>
+            </fieldset>
+            <fieldset ng-show="step==2">
+                <div class="form-top">
+                    <div class="form-top-left">
+                        <h3><span><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span> Confirm Your
+                            Appointment</h3>
+                    </div>
+                </div>
+                <div class="form-bottom">
+                    <table class="table table-fixed" ng-show="appointment">
+                        <thead>
+                        <tr>
+                            <th class="col-xs-6">Patient Name:
+                                {{ appointment.patient.first_name }} {{ appointment.patient.last_name }}
+                            </th>
+                            <th class="col-xs-6">Exam Room {{ appointment.exam_room }}</th>
+                        </tr>
+                        <tr>
+                            <th class="col-xs-6">Durations: {{ appointment.duration }}</th>
+                            <th class="col-xs-6">Scheduled Time: {{ appointment.scheduled_time | limitTo:10:11 }}</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <p>{{ error_2 }}</p>
+                    <button type="button" class="btn btn-previous" ng-click="prev()">Back</button>
+                    <button type="submit" class="btn" ng-show="appointment" ng-click="appointment_check_in()">Check In
+                    </button>
+                </div>
+            </fieldset>
+            <fieldset ng-show="step==3">
+                <div class="form-top">
+                    <div class="form-top-left">
+                        <h3><span><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span> Confirm Your
+                            Information</h3>
+                        <p>{{ error_3 }}
+                        </p>
+                    </div>
+                </div>
+                <div class="form-bottom">
+
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Email:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control" type="text" ng-model="patient.email">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Social Security Number:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control" type="text" ng-model="patient.social_security_number">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Cell Phone:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control" type="text" ng-model="patient.cell_phone">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Data of Birth:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control" type="text" ng-model="patient.date_of_birth">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">Address:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control" type="text" ng-model="patient.address">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Zip Code:</label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="text" ng-model="patient.zip_code">
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                    </form>
+                    <button type="button" class="btn" ng-click="refresh_page()">Skip</button>
+                    <button type="button" class="btn" ng-click="update_patient_info()">Submit
+                    </button>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    {% endverbatim %}
+
+{% endblock %}
+
+{% block script_block %}
+    <script src="{% static 'drchrono/js/kiosk.js' %}"></script>
+{% endblock %}

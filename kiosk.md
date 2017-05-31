@@ -13,6 +13,7 @@
 	- update patient's information
 	- notify doctor
 	- show current number in queue and average waiting time
+	- refresh page after idle for a while
 
 	
 # backend

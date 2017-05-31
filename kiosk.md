@@ -28,7 +28,7 @@
 		- lifetime\_appointment_count
 	- AppointmentProfile
 		- doctor
-		- appointment_id
+		- __appointment_id__
 		- arrival_time
 		- started_time
 		- complete_time 

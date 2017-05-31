@@ -54,7 +54,11 @@ def check_in_session(request):
         request.session['doc_id'] = doc_id
         doctor_info = ApiHelper.get_doctors(token, id=doc_id).json()
         doc, _ = Doctor.objects.get_or_create(doctor_id=doc_id)
-        doc.update(access_token=token, first_name=doctor_info['first_name'], last_name=doctor_info['last_name'])
+        doc.access_token = token
+        # in case name changed
+        doc.first_name = doctor_info['first_name']
+        doc.last_name = doctor_info['last_name']
+        doc.save()
 
 
 def get_access_token(request):

@@ -74,6 +74,7 @@ def reset_all_appointment():
 
 if __name__ == '__main__':
     reset_all_appointment()
+    clean_appointment_profiles()
     # delete_all_appointment()
     # generate_api_appointments()
     # print timezone.now()

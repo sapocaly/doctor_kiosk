@@ -155,13 +155,14 @@
 
 
         function show_dialog(type, title, message, callback) {
-            BootstrapDialog.show({
+            $scope.dialog = new BootstrapDialog({
                 type: type,
                 title: title,
                 size: BootstrapDialog.SIZE_LARGE,
                 message: message,
                 onhidden: callback
-            })
+            });
+            $scope.dialog.open();
         }
 
         $scope.refresh_page = function () {
@@ -187,6 +188,9 @@
         }
 
         function closeModals() {
+            if ($scope.dialog) {
+                $scope.dialog.close();
+            }
             if ($scope.warning) {
                 $scope.warning.close();
                 $scope.warning = null;

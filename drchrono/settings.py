@@ -96,7 +96,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'America/New_York'
+TIME_ZONE = 'America/Los_Angeles'
 
 USE_I18N = True
 
@@ -120,13 +120,13 @@ SOCIAL_AUTH_DRCHRONO_KEY = 'GnDSpUCwJZn6orlpxik6CUiP28sehC5vG5VNNeJh'
 SOCIAL_AUTH_DRCHRONO_SECRET = 'TpYnpHoblJYxHsgF3wXqVvHDxn8xiCpziXRNTggijd04ZtAuVLTzoaBeJJbleYa0SH7eKViq9A7fEsGHVqiIQ2YhaA257SRZGyS9G0Q27lbwpbYJJ7On1pEq30M14gKn'
 LOGIN_REDIRECT_URL = '/dashboard/'
 
-
+# django channels setting
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "asgi_redis.RedisChannelLayer",
         "CONFIG": {
             "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
         },
-        "ROUTING": "drchrono.routing.channel_routing",
+        "ROUTING": "drchrono.websocket.channel_routing",
     },
 }

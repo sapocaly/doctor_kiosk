@@ -10,12 +10,9 @@ class PatientView(View):
     def get(self, request):
         token = get_access_token(request)
         response = ApiHelper.get_patients(token, **request.GET)
-        # if id is specified, then a response object is returned
+        # if id is specified, then a response obj is returned, otherwise a recursive get will return a list of obj
         if 'id' in request.GET:
-            if response.status_code == 200:
-                return JsonResponse({'success': True, 'data': response.json()})
-            else:
-                return JsonResponse({'success': False, 'data': response.json()})
+            return JsonResponse({'success': response.status_code == 200, 'data': response.json()})
         return JsonResponse({'success': True, 'data': response})
 
     def post(self, request):
@@ -30,17 +27,17 @@ class PatientView(View):
 
 class AppointmentView(View):
     def post(self, request):
-        param_dict = request.POST
         if 'id' not in request.POST:
             return JsonResponse({"success": False, 'error': 'id is not specified'})
         token = get_access_token(request)
-        res = ApiHelper.patch_appointments(token, **param_dict)
+        res = ApiHelper.patch_appointments(token, **request.POST)
         if res.status_code != 204:
             return JsonResponse({"success": False, "error": res.json()})
-        if 'status' in param_dict:
+        # generate or synchronize AppointmentProfile locally except when status is no show
+        if 'status' in request.POST and request.POST['status'] != 'No Show':
             doctor = Doctor.objects.get(doctor_id=request.session['doc_id'])
             appointment, _ = AppointmentProfile.objects.get_or_create(doctor=doctor, app_id=request.POST['id'])
-            status = param_dict['status']
+            status = request.POST['status']
             if status == 'In Session':
                 appointment.started_time = timezone.now()
                 doctor.lifetime_appointment_count += 1
@@ -53,15 +50,17 @@ class AppointmentView(View):
 
 
 class AppointmentListView(View):
+    """
+    today's appointment, come with patient info and local appointment profile
+    """
+
     def get(self, request):
         today = timezone.localtime(timezone.now()).date()
         token = get_access_token(request)
         appointments = ApiHelper.get_appointments(token, date=today, **request.GET)
         data = {'appointments': [], 'current': None}
         patients = ApiHelper.get_patients(token, rec=True)
-        patient_table = {}
-        for patient in patients:
-            patient_table[patient['id']] = patient
+        patient_table = {patient['id']: patient for patient in patients}
         for appointment in appointments:
             appointment['patient'] = patient_table[appointment['patient']]
             if appointment['status'] == 'Arrived':

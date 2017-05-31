@@ -5,10 +5,17 @@
 {% endblock %}
 
 {% block head_block %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/ng-toast/2.0.0/ngToast.min.css" rel="stylesheet">
     <link href="{% static 'drchrono/css/simple-sidebar.css' %}" rel="stylesheet">
     <link href="{% static 'drchrono/css/ngprogress.css' %}" rel="stylesheet">
-    <link href="{% static 'drchrono/css/ngToast.min.css' %}" rel="stylesheet">
     <link href="{% static 'drchrono/css/dashboard.css' %}" rel="stylesheet">
+    <style>
+        .ng-toast.ng-toast--right .ng-toast__list {
+            left: auto;
+            right: 330px;
+            margin-right: 20px
+        }
+    </style>
 {% endblock %}
 
 {% block body_block %}
@@ -22,10 +29,10 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#1a">Appointments</a>
+                    <a href="#">Appointments</a>
                 </li>
                 <li>
-                    <a href="#2a">Statistics</a>
+                    <a href="#">Statistics</a>
                 </li>
                 <li>
                     <a href="#">About</a>
@@ -179,11 +186,11 @@
 {% endblock %}
 
 {% block script_block %}
-    <script src="{% static 'drchrono/js/ngprogress.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.3/angular-animate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.6.4/angular-sanitize.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ng-toast/2.0.0/ngToast.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngprogress/1.1.3/ngProgress.min.js"></script>
     <script src="{% static 'drchrono/js/dashboard.js' %}"></script>
-    <script src="{% static 'drchrono/js/angular-animate.js' %}"></script>
-    <script src="{% static 'drchrono/js/angular-sanitize.js' %}"></script>
-    <script src="{% static 'drchrono/js/ngToast.min.js' %}"></script>
     <script>
         $("#menu-toggle").click(function (e) {
             e.preventDefault();

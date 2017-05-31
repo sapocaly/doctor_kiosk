@@ -6,9 +6,10 @@
 {% endblock %}
 
 {% block head_block %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/angular-moment-picker/0.10.1/angular-moment-picker.min.css"
+          rel="stylesheet">
     <link href="{% static "drchrono/css/kiosk.css" %}" rel="stylesheet">
     <link href="{% static 'drchrono/css/ngprogress.css' %}" rel="stylesheet">
-    <link href="{% static "drchrono/css/angular-moment-picker.min.css" %}" rel="stylesheet">
 {% endblock %}
 
 
@@ -163,10 +164,9 @@
 {% endblock %}
 
 {% block script_block %}
-    <script src="{% static 'drchrono/js/ngprogress.js' %}"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngprogress/1.1.3/ngProgress.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment-picker/0.10.1/angular-moment-picker.min.js"></script>
     <script src="{% static 'drchrono/js/states.js' %}"></script>
-
     <script src="{% static 'drchrono/js/kiosk.js' %}"></script>
-    <script src="{% static 'drchrono/js/angular-moment-picker.min.js' %}"></script>
 {% endblock %}

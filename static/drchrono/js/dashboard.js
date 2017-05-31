@@ -36,13 +36,13 @@
             };
         };
 
-
         // set appointment status to In Session and post to remote
         $scope.start_appointment = function (appointment) {
             $scope.progressbar.start();
             appointment.status = 'In Session';
             // freeze the waited time in the scope
             //appointment.time_waited = appointment.time_waited + $scope.time_counter;
+            // update locally first, reduce user waiting time
             $scope.current = appointment;
             // remove appointment from apoointment list
             var index = $scope.appointments.indexOf(appointment);
@@ -51,6 +51,7 @@
                 'id': appointment.id,
                 'status': 'In Session'
             };
+            // update remotely
             api_post("/api/appointment/", params, function () {
                 console.log('success update remote');
                 // may want to sync data from server
@@ -92,7 +93,6 @@
             $scope.get_doctor();
         };
 
-
         // automatically increment timer
         $scope.onTimeout = function () {
             $scope.time_counter++;
@@ -106,11 +106,6 @@
                 $scope.avg_time = parseInt($scope.my_doctor.lifetime_waiting / $scope.my_doctor.lifetime_appointment_count / 60)
             });
         }
-
-        // load data
-        $scope.refresh_data();
-        $timeout($scope.onTimeout, 1000);
-        $scope.set_up_connection();
 
         // api get helper function
         function api_get(url, params, callback) {
@@ -153,5 +148,10 @@
         $scope.is_late = function (appointment) {
             return Date.parse(appointment.scheduled_time) < new Date();
         };
+
+        // load data
+        $scope.refresh_data();
+        $timeout($scope.onTimeout, 1000);
+        $scope.set_up_connection();
     });
 })();

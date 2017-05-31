@@ -9,7 +9,7 @@ django.setup()
 from django.utils import timezone
 from django.utils.timezone import localtime
 
-from drchrono.models import AppointmentProfile, Doctor, Notification
+from drchrono.models import AppointmentProfile, Doctor
 
 from drchrono.helper import ApiHelper
 
@@ -28,7 +28,7 @@ scheduled_time	timestamp	required	The starting time of the appointment
 
 DOCTOR = 133464
 OFFICE = 141500
-PATIENT = [65249162,65339098,65339112,65339114]
+PATIENT = [65249162, 65339098, 65339112, 65339114]
 DURATIONS = [30, 45, 50, 37]
 TOKEN = 'QL6w3g0HbSdqFWMhMxCqcsETPKYg2M'
 
@@ -39,7 +39,7 @@ def generate_api_appointments():
         shuffle(PATIENT)
         shuffle(DURATIONS)
         scheduled_time = now.replace(hour=i, minute=0)
-        print ApiHelper.post_appointments(TOKEN, doctor=DOCTOR, duration=DURATIONS[0], exam_room=randint(1, 8),
+        print ApiHelper.post_appointments(TOKEN, doctor=DOCTOR, duration=DURATIONS[0], exam_room=randint(1, 4),
                                           office=OFFICE,
                                           status='Confirmed',
                                           patient=PATIENT[0],
@@ -53,13 +53,16 @@ def clean_appointment_profiles():
 def clean_doctors():
     Doctor.objects.all().delete()
 
+
 def delete_all_appointment():
     today = localtime(timezone.now()).date()
     today_apps = ApiHelper.get_appointments(TOKEN, date=today)
     app_ids = [app['id'] for app in today_apps]
     for id in app_ids:
-        requests.delete('https://drchrono.com/api/appointments/{}'.format(id), headers = {'Authorization': 'Bearer {}'.format(TOKEN), })
+        requests.delete('https://drchrono.com/api/appointments/{}'.format(id),
+                        headers={'Authorization': 'Bearer {}'.format(TOKEN), })
         ##ApiHelper.delete_appointments(TOKEN, id=id)
+
 
 def reset_all_appointment():
     today = localtime(timezone.now()).date()
@@ -69,11 +72,9 @@ def reset_all_appointment():
         ApiHelper.patch_appointments(TOKEN, id=id, status='Confirmed')
 
 
-
 if __name__ == '__main__':
     reset_all_appointment()
-    #delete_all_appointment()
-    #generate_api_appointments()
-    #print timezone.now()
-    #Notification.objects.all().delete()
-    #clean_doctors()
+    # delete_all_appointment()
+    # generate_api_appointments()
+    # print timezone.now()
+    # clean_doctors()

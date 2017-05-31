@@ -24,8 +24,8 @@ class Migration(migrations.Migration):
             name='Doctor',
             fields=[
                 ('doctor_id', models.IntegerField(serialize=False, primary_key=True)),
-                ('first_name', models.CharField(max_length=30)),
-                ('last_name', models.CharField(max_length=30)),
+                ('first_name', models.CharField(max_length=50)),
+                ('last_name', models.CharField(max_length=50)),
                 ('access_token', models.CharField(max_length=200)),
                 ('lifetime_waiting', models.DurationField(default=datetime.timedelta(0))),
                 ('lifetime_appointment_count', models.IntegerField(default=0)),

@@ -9,35 +9,32 @@
         }
     ]);
 
-
     app.controller('myCtrl', function ($scope, $http, ngProgressFactory) {
-        $scope.progressbar = ngProgressFactory.createInstance();
         $scope.step = 1;
+        $scope.progressbar = ngProgressFactory.createInstance();
         $scope.states = states;
+
         // back to previous step
         $scope.prev = function () {
             $scope.step--;
         }
-
 
         $scope.set_up_connection = function () {
             $scope.chatsock = new ReconnectingWebSocket('ws://' + window.location.host);
         };
 
         $scope.send_message = function (message) {
-            console.log('send_message');
             var message = {
                 message: message,
             }
             $scope.chatsock.send(JSON.stringify(message));
         }
 
-
         // step one function, check patient info
         $scope.check_patient_info = function () {
-            $scope.progressbar.start();
             // make sure form filled
             if ($scope.first_name && $scope.last_name && $scope.email) {
+                $scope.progressbar.start();
                 api_get("/api/patient/",
                     {
                         "first_name": $scope.first_name,
@@ -115,13 +112,13 @@
                 } else {
                     var average_min = parseInt($scope.doctor.lifetime_waiting / $scope.doctor.lifetime_appointment_count / 60);
                     // this is a long string
+                    message = $scope.patient.first_name + ' ' + $scope.patient.last_name + ' arrived';
+                    $scope.send_message(message);
                     show_dialog(BootstrapDialog.TYPE_SUCCESS, 'Almost there!', 'Doctor is notified! There are '
                         + $scope.waiting_count + ' people before you. Average waiting time is ' + average_min + ' minutes');
                     $scope.step = 3;
                 }
             });
-            var message = $scope.patient.first_name + ' ' + $scope.patient.last_name + ' arrived';
-            $scope.send_message(message);
         };
 
 
@@ -133,7 +130,7 @@
                 'address': $scope.patient.address,
                 'social_security_number': $scope.patient.social_security_number,
                 'zip_code': $scope.patient.zip_code,
-                'cellphone': $scope.patient.cell_phone,
+                'cell_phone': $scope.patient.cell_phone,
                 "date_of_birth": $scope.patient.date_of_birth,
                 "city": $scope.patient.city,
                 "state": $scope.patient.state,
@@ -164,10 +161,8 @@
 
         $scope.refresh_page = function () {
             location.reload();
-        }
+        };
 
-        $scope.get_doctor();
-        $scope.set_up_connection();
         function api_get(url, params, callback) {
             $http.get(url, {
                 params: params
@@ -186,6 +181,7 @@
                 });
         }
 
-
+        $scope.get_doctor();
+        $scope.set_up_connection();
     });
 })();

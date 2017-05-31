@@ -26,13 +26,13 @@
     app.controller('myCtrl', function ($scope, $timeout, $http, ngProgressFactory, ngToast) {
         $scope.progressbar = ngProgressFactory.createInstance();
 
-        $scope.set_up_connection = function () {
+        function set_up_connection() {
             $scope.chatsock = new ReconnectingWebSocket('ws://' + window.location.host + "/doctor");
             $scope.chatsock.onmessage = function (message) {
                 ngToast.create({
                     content: '<h2>' + message.data + '</h2>',
                 });
-                $scope.refresh_data();
+                refresh_data();
             };
         };
 
@@ -55,7 +55,7 @@
             api_post("/api/appointment/", params, function () {
                 console.log('success update remote');
                 // may want to sync data from server
-                $scope.refresh_data();
+                refresh_data();
             });
 
         };
@@ -74,13 +74,13 @@
             api_post("/api/appointment/", params, function () {
                     console.log('success remote updated');
                     // refresh data so appointments remain ordered by time
-                    $scope.refresh_data();
+                    refresh_data();
                 }
             );
         };
 
         // refresh all the data
-        $scope.refresh_data = function () {
+        function refresh_data() {
             $scope.progressbar.start();
             api_get("/api/appointment_list/", {}, function (response) {
                     $scope.appointments = response.data.data.appointments;
@@ -141,7 +141,7 @@
             api_post("/api/appointment/", params, function () {
                     console.log('success remote updated');
                     // refresh data so appointments remain ordered by time
-                    $scope.refresh_data();
+                    refresh_data();
                 }
             );
         };
@@ -151,8 +151,8 @@
         };
 
         // load data
-        $scope.refresh_data();
+        refresh_data();
         $timeout($scope.onTimeout, 1000);
-        $scope.set_up_connection();
+        set_up_connection();
     });
 })();

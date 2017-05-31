@@ -24,11 +24,11 @@
             $scope.step--;
         }
 
-        $scope.set_up_connection = function () {
+        function set_up_connection() {
             $scope.chatsock = new ReconnectingWebSocket('ws://' + window.location.host);
         };
 
-        $scope.send_message = function (message) {
+        function send_message(message) {
             var message = {
                 message: message,
             }
@@ -47,6 +47,7 @@
                         "email": $scope.email,
                     },
                     function (response) {
+                        $scope.progressbar.complete();
                         // assuming all f_name, l_name, email combination is unique
                         $scope.patient = response.data.data[0];
                         if ($scope.patient) {
@@ -64,13 +65,12 @@
             }
         };
 
-        $scope.get_doctor = function () {
+        get_doctor = function () {
             api_get("/api/doctor/", {}, function (response) {
                 $scope.doctor = response.data;
             });
         }
 
-        // don't really need to inject this into scope, but whatever
         $scope.get_appointment_info = function () {
             $scope.progressbar.start();
             $scope.error_2 = '......retrieving appointment information....';
@@ -118,7 +118,7 @@
                     var average_min = parseInt($scope.doctor.lifetime_waiting / $scope.doctor.lifetime_appointment_count / 60);
                     // this is a long string
                     message = $scope.patient.first_name + ' ' + $scope.patient.last_name + ' arrived';
-                    $scope.send_message(message);
+                    send_message(message);
                     show_dialog(BootstrapDialog.TYPE_SUCCESS, 'Almost there!', 'Doctor is notified! There are '
                         + $scope.waiting_count + ' people before you. Average waiting time is ' + average_min + ' minutes');
                     $scope.step = 3;
@@ -220,7 +220,7 @@
             Idle.watch();
         };
 
-        $scope.get_doctor();
-        $scope.set_up_connection();
+        get_doctor();
+        set_up_connection();
     });
 })();

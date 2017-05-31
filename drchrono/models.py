@@ -18,7 +18,7 @@ class Doctor(models.Model):
                     lifetime_appointment_count=self.lifetime_appointment_count)
 
     def __str__(self):
-        return self.first_name + ' ' + self.last_name
+        return '{} {}'.format(self.first_name, self.last_name)
 
 
 class AppointmentProfile(models.Model):
@@ -29,4 +29,4 @@ class AppointmentProfile(models.Model):
     completed_time = models.DateTimeField(null=True)
 
     def __str__(self):
-        return self.doctor.first_name + '@' + str(self.arrival_time)
+        return '{} {} arrived time: {}'.format(self.doctor.first_name, self.doctor.last_name, self.arrival_time)

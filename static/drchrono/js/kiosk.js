@@ -126,7 +126,7 @@
             });
         };
 
-
+        // push patient info to server, show dialog bas on success/fail
         $scope.update_patient_info = function () {
             $scope.progressbar.start();
             var params = {
@@ -169,6 +169,7 @@
             location.reload();
         };
 
+        // api helpers
         function api_get(url, params, callback) {
             $http.get(url, {
                 params: params
@@ -187,6 +188,7 @@
                 });
         }
 
+        // idle functions
         function closeModals() {
             if ($scope.dialog) {
                 $scope.dialog.close();

@@ -129,6 +129,7 @@
                 });
         }
 
+        // set appointment status to no show
         $scope.no_show_appointment = function (appointment) {
             $scope.progressbar.start();
             appointment.status = 'No Show';

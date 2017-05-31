@@ -115,9 +115,9 @@ STATICFILES_DIRS = [
 LOGIN_URL = '/login/drchrono/'
 
 # drchrono social auth settings
-# SOCIAL_AUTH_DRCHRONO_SCOPE = ['patients:read']
 SOCIAL_AUTH_DRCHRONO_KEY = 'GnDSpUCwJZn6orlpxik6CUiP28sehC5vG5VNNeJh'
 SOCIAL_AUTH_DRCHRONO_SECRET = 'TpYnpHoblJYxHsgF3wXqVvHDxn8xiCpziXRNTggijd04ZtAuVLTzoaBeJJbleYa0SH7eKViq9A7fEsGHVqiIQ2YhaA257SRZGyS9G0Q27lbwpbYJJ7On1pEq30M14gKn'
+
 LOGIN_REDIRECT_URL = '/dashboard/'
 
 # django channels setting

@@ -80,8 +80,8 @@
                                                     </th>
                                                 </tr>
                                                 <tr>
-                                                    <th class="col-xs-6"><span class="pat-label">Custom Vitals:</span>
-                                                        {{ current.custom_vitals }}
+                                                    <th class="col-xs-6"><span class="pat-label">Reason:</span>
+                                                        {{ current.reason }}
                                                     </th>
                                                     <th class="col-xs-6"><span class="pat-label">Location:</span> Exam
                                                         Room {{ current.exam_room }}
@@ -195,8 +195,6 @@
         $("#menu-toggle").click(function (e) {
             e.preventDefault();
             $("#wrapper").toggleClass("toggled");
-            console.log($('.ng-toast.ng-toast--right .ng-toast__list'));
-            $('.ng-toast.ng-toast--right .ng-toast__list').toggleClass("toggled");
         });
     </script>
 {% endblock %}

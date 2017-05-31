@@ -19,6 +19,20 @@
             $scope.step--;
         }
 
+
+        $scope.set_up_connection = function () {
+            $scope.chatsock = new ReconnectingWebSocket('ws://' + window.location.host);
+        };
+
+        $scope.send_message = function (message) {
+            console.log('send_message');
+            var message = {
+                message: message,
+            }
+            $scope.chatsock.send(JSON.stringify(message));
+        }
+
+
         // step one function, check patient info
         $scope.check_patient_info = function () {
             $scope.progressbar.start();
@@ -106,19 +120,10 @@
                     $scope.step = 3;
                 }
             });
-            $scope.send_notification();
+            var message = $scope.patient.first_name + ' ' + $scope.patient.last_name + ' arrived';
+            $scope.send_message(message);
         };
 
-        $scope.send_notification = function () {
-            console.log('start sending notification');
-            var img_part = '<img src='
-            var params = {
-                'message': $scope.patient.first_name + ' ' + $scope.patient.last_name + ' arrived',
-            };
-            api_post("/api/notification/", params, function (response) {
-                console.log(response);
-            });
-        };
 
         $scope.update_patient_info = function () {
             $scope.progressbar.start();
@@ -162,7 +167,7 @@
         }
 
         $scope.get_doctor();
-
+        $scope.set_up_connection();
         function api_get(url, params, callback) {
             $http.get(url, {
                 params: params
@@ -180,7 +185,6 @@
                     console.error(response);
                 });
         }
-
 
 
     });

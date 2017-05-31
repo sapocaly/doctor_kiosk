@@ -30,11 +30,3 @@ class AppointmentProfile(models.Model):
 
     def __str__(self):
         return self.doctor.first_name + '@' + str(self.arrival_time)
-
-
-class Notification(models.Model):
-    message = models.CharField(max_length=200);
-    notified = models.BooleanField(default=False);
-    created_time = models.DateTimeField(auto_now_add=True)
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
-

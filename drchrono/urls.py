@@ -10,7 +10,6 @@ api_patterns = [
     url(r'^appointment/$', api_views.AppointmentView.as_view(), name='appointment'),
     url(r'^doctor/$', api_views.DoctorView.as_view(), name='doctor'),
     url(r'^appointment_list/$', api_views.AppointmentListView.as_view(), name='appointment_list'),
-    url(r'^notification/$', api_views.NotificationView.as_view(), name='notification'),
 ]
 
 urlpatterns = [
@@ -21,4 +20,5 @@ urlpatterns = [
     url(r'^api/', include(api_patterns, namespace='api')),
     url(r'', include('social.apps.django_app.urls', namespace='social')),
     url(r'^admin/', admin.site.urls),
+    # url(r'^socket/$', TemplateView.as_view(template_name='drchrono/socket.html'), name='socket'),
 ]

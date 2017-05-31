@@ -16,8 +16,6 @@
         }
     ]);
 
-    console.log(window.location.host + "/chat" + window.location.pathname);
-
     //convert seconds to proper time format
     app.filter('secondsToDateTime', [function () {
         return function (seconds) {
@@ -28,21 +26,16 @@
     app.controller('myCtrl', function ($scope, $timeout, $http, ngProgressFactory, ngToast) {
         $scope.progressbar = ngProgressFactory.createInstance();
 
-        $scope.check_for_notification = function () {
-            api_get("/api/notification/", {}, function (response) {
-                var notifications = response.data.data.messages;
-                for (var j = 0; j < notifications.length; j++) {
-                    notification = notifications[j];
-                    ngToast.create({
-                        horizontalPosition: 'center',
-                        content: '<h2>' + notification + '</h2>',
-                    });
-                }
-                if (notifications.length > 0){
-                    $scope.refresh_data();
-                }
-            });
+        $scope.set_up_connection = function () {
+            $scope.chatsock = new ReconnectingWebSocket('ws://' + window.location.host + "/doctor");
+            $scope.chatsock.onmessage = function (message) {
+                ngToast.create({
+                    content: '<h2>' + message.data + '</h2>',
+                });
+                $scope.refresh_data();
+            };
         };
+
 
         // set appointment status to In Session and post to remote
         $scope.start_appointment = function (appointment) {
@@ -100,12 +93,6 @@
         };
 
 
-        $scope.check_notification_every_10_seconds = function () {
-            $scope.check_for_notification();
-            //console.log('check_now');
-            $timeout($scope.check_notification_every_10_seconds, 10000);
-        };
-
         // automatically increment timer
         $scope.onTimeout = function () {
             $scope.time_counter++;
@@ -123,7 +110,7 @@
         // load data
         $scope.refresh_data();
         $timeout($scope.onTimeout, 1000);
-        $scope.check_notification_every_10_seconds();
+        $scope.set_up_connection();
 
         // api get helper function
         function api_get(url, params, callback) {
@@ -147,7 +134,7 @@
                 });
         }
 
-        $scope.no_show_appointment = function(appointment) {
+        $scope.no_show_appointment = function (appointment) {
             $scope.progressbar.start();
             appointment.status = 'No Show';
             // put into appointment list again
@@ -163,7 +150,7 @@
             );
         };
 
-        $scope.is_late = function(appointment) {
+        $scope.is_late = function (appointment) {
             return Date.parse(appointment.scheduled_time) < new Date();
         };
     });

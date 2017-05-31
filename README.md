@@ -13,7 +13,7 @@
 	- patient arrival notification
 
 - kiosk
-	- retrieve patient infomation with name and email
+	- retrieve patient information with name and email
 	- retrieve patient's confirmed appointment
 	- update patient's information
 	- notify doctor

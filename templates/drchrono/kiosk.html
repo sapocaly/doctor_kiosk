@@ -11,7 +11,7 @@
     <link href="{% static "drchrono/css/kiosk.css" %}" rel="stylesheet">
     <link href="{% static 'drchrono/css/ngprogress.css' %}" rel="stylesheet">
 {% endblock %}
-
+a
 
 {% block body_block %}
     <video poster="{% static "drchrono/files/Black_Keys/Black_Keys.jpg" %}" playsinline autoplay muted loop>
@@ -20,7 +20,7 @@
     </video>
     {%verbatim%}
     <div style="height:200px;"></div>
-    <div class="assessment-container container" ng-app="myApp" ng-controller="myCtrl">
+    <div class="assessment-container container" ng-app="myApp" ng-controller="myCtrl" ng-cloak>
         <div class="row">
             <fieldset ng-show="step==1">
                 <div class="form-top">

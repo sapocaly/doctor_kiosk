@@ -62,6 +62,7 @@
 - form validation for cell# and ssn
 - update all data at real time with django channels
 - form blank input update issue
+- add confirmation dialog for No Show button
 
 
 

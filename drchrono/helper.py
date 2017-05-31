@@ -8,7 +8,7 @@ DRCHRONO_API_TEMPLATE = 'https://drchrono.com/api/{}'
 class ProtoType(type):
     """
     A Helper Class For API Usage
-    dynamically create method by name
+    dynamically create method with __getattr__
     """
 
     def __getattr__(cls, key):

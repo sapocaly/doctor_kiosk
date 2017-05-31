@@ -246,3 +246,12 @@ select {
     color: red;
     width: 100%;
 }
+
+.modal-header {
+    background-color: black;
+}
+
+.modal-header h3 {
+    font-size: 30px;
+    color: white;
+}

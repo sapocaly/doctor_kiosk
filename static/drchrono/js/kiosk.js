@@ -1,5 +1,5 @@
 (function () {
-    var app = angular.module("myApp", ['ngProgress', 'moment-picker']);
+    var app = angular.module("myApp", ['ngProgress', 'moment-picker', 'ngIdle', 'ui.bootstrap']);
 
     app.config(['$httpProvider',
         function ($httpProvider) {
@@ -9,7 +9,12 @@
         }
     ]);
 
-    app.controller('myCtrl', function ($scope, $http, ngProgressFactory) {
+    app.config(function (IdleProvider) {
+        IdleProvider.idle(5);
+        IdleProvider.timeout(5);
+    });
+
+    app.controller('myCtrl', function ($scope, $http, ngProgressFactory, Idle, $uibModal) {
         $scope.step = 1;
         $scope.progressbar = ngProgressFactory.createInstance();
         $scope.states = states;
@@ -42,7 +47,6 @@
                         "email": $scope.email,
                     },
                     function (response) {
-                        $scope.progressbar.complete();
                         // assuming all f_name, l_name, email combination is unique
                         $scope.patient = response.data.data[0];
                         if ($scope.patient) {
@@ -87,6 +91,7 @@
                         $scope.waiting_count++;
                     }
                 }
+                $scope.start();
                 $scope.error_2 = null;
                 if ($scope.appointment) {
                     // nothing really, the confirm button will show up automatically
@@ -180,6 +185,34 @@
                     console.error(response);
                 });
         }
+
+        function closeModals() {
+            if ($scope.warning) {
+                $scope.warning.close();
+                $scope.warning = null;
+            }
+        }
+
+        $scope.$on('IdleStart', function () {
+            closeModals();
+            $scope.warning = $uibModal.open({
+                templateUrl: 'warning-dialog.html',
+                windowClass: 'modal-danger'
+            });
+        });
+
+        $scope.$on('IdleEnd', function () {
+            closeModals();
+        });
+
+        $scope.$on('IdleTimeout', function () {
+            closeModals();
+            $scope.refresh_page();
+        });
+
+        $scope.start = function () {
+            Idle.watch();
+        };
 
         $scope.get_doctor();
         $scope.set_up_connection();

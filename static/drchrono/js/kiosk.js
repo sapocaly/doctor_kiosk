@@ -1,5 +1,5 @@
 (function () {
-    var app = angular.module("myApp", ['ngProgress','moment-picker']);
+    var app = angular.module("myApp", ['ngProgress', 'moment-picker']);
 
     app.config(['$httpProvider',
         function ($httpProvider) {
@@ -13,6 +13,7 @@
     app.controller('myCtrl', function ($scope, $http, ngProgressFactory) {
         $scope.progressbar = ngProgressFactory.createInstance();
         $scope.step = 1;
+        $scope.states = states;
         // back to previous step
         $scope.prev = function () {
             $scope.step--;
@@ -101,7 +102,7 @@
                     var average_min = parseInt($scope.doctor.lifetime_waiting / $scope.doctor.lifetime_appointment_count / 60);
                     // this is a long string
                     show_dialog(BootstrapDialog.TYPE_SUCCESS, 'Almost there!', 'Doctor is notified! There are '
-                        + $scope.waiting_count + ' person(s) before you. Average waiting time is ' + average_min + 'minutes');
+                        + $scope.waiting_count + ' people before you. Average waiting time is ' + average_min + ' minutes');
                     $scope.step = 3;
                 }
             });
@@ -110,8 +111,9 @@
 
         $scope.send_notification = function () {
             console.log('start sending notification');
+            var img_part = '<img src='
             var params = {
-                'message': $scope.patient.first_name + ' ' + $scope.patient.last_name + ' just checked in',
+                'message': $scope.patient.first_name + ' ' + $scope.patient.last_name + ' arrived',
             };
             api_post("/api/notification/", params, function (response) {
                 console.log(response);
@@ -128,6 +130,9 @@
                 'zip_code': $scope.patient.zip_code,
                 'cellphone': $scope.patient.cell_phone,
                 "date_of_birth": $scope.patient.date_of_birth,
+                "city": $scope.patient.city,
+                "state": $scope.patient.state,
+
             };
             //fields with blank input will not be updated at this time
             //to-do: fix the blank input, this might be handled easily from the backend
@@ -175,5 +180,8 @@
                     console.error(response);
                 });
         }
+
+
+
     });
 })();

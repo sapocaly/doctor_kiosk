@@ -2,6 +2,7 @@ input[type="text"],
 input[type="email"],
 input[type="date"],
 .form-control,
+select,
 select.form-control {
     height: 50px;
     margin: 0;
@@ -239,4 +240,9 @@ video {
     height: auto;
     z-index: -100;
     transform: translateX(-50%) translateY(-50%);
+}
+
+select {
+    color:red;
+    width: 100%;
 }

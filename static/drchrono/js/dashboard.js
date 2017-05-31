@@ -16,6 +16,8 @@
         }
     ]);
 
+    console.log(window.location.host + "/chat" + window.location.pathname);
+
     //convert seconds to proper time format
     app.filter('secondsToDateTime', [function () {
         return function (seconds) {
@@ -29,12 +31,11 @@
         $scope.check_for_notification = function () {
             api_get("/api/notification/", {}, function (response) {
                 var notifications = response.data.data.messages;
-                console.log(notifications);
                 for (var j = 0; j < notifications.length; j++) {
                     notification = notifications[j];
                     ngToast.create({
                         horizontalPosition: 'center',
-                        content: notification,
+                        content: '<h2>' + notification + '</h2>',
                     });
                 }
                 if (notifications.length > 0){
@@ -145,5 +146,25 @@
                     console.error(response);
                 });
         }
+
+        $scope.no_show_appointment = function(appointment) {
+            $scope.progressbar.start();
+            appointment.status = 'No Show';
+            // put into appointment list again
+            var params = {
+                'id': appointment.id,
+                'status': 'No Show'
+            };
+            api_post("/api/appointment/", params, function () {
+                    console.log('success remote updated');
+                    // refresh data so appointments remain ordered by time
+                    $scope.refresh_data();
+                }
+            );
+        };
+
+        $scope.is_late = function(appointment) {
+            return Date.parse(appointment.scheduled_time) < new Date();
+        };
     });
 })();

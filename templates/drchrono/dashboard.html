@@ -152,7 +152,12 @@
                                                 <div ng-if="!current && app.status == 'Arrived'">
                                                     <a class="btn btn-primary start-btn"
                                                        ng-click="start_appointment(app)"
-                                                       role="button">Start</a>
+                                                       role="button">&nbsp&nbsp Start &nbsp&nbsp&nbsp</a>
+                                                </div>
+                                                <div ng-if="app.status == 'Confirmed' && is_late(app)">
+                                                    <a class="btn btn-primary start-btn"
+                                                       ng-click="no_show_appointment(app)"
+                                                       role="button">No Show</a>
                                                 </div>
                                             </td>
                                         </tr>

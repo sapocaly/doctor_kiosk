@@ -1,6 +1,7 @@
 from datetime import timedelta
 import time
 
+from django.db.models import Q
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views.generic import View
@@ -91,15 +92,13 @@ class DoctorView(View):
 class NotificationView(View):
     def get(self, request):
         doctor = Doctor.objects.get(doctor_id=request.session['doc_id'])
-        print 'ha'
+        time_limit = timezone.now() - timedelta(minutes=60)
         for i in range(3):
-            time_limit = timezone.now() - timedelta(minutes=60)
             notifications = Notification.objects.filter(notified=False, created_time__gt=time_limit, doctor=doctor)
             if notifications:
                 print notifications
                 messages = [notification.message for notification in notifications]
                 notifications.update(notified=True)
-                print messages
                 return JsonResponse({'success': True, 'data': {'messages': messages}}, safe=False)
             time.sleep(2)
         return JsonResponse({'success': True, 'data': {'messages': []}}, safe=False)
